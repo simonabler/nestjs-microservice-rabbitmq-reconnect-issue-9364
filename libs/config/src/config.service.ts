@@ -15,8 +15,8 @@ export class ConfigService {
 
     constructor(private configService: NestConfigService) {
 
-        this.haproxy_server = this.configService.get('haproxy_server');
-        this.haproxy_client = this.configService.get('haproxy_client');
+        this.haproxy_server = this.configService.get('haproxy_server') === 'true' || this.configService.get('haproxy_server') === 'True';
+        this.haproxy_client = this.configService.get('haproxy_client') === 'true' || this.configService.get('haproxy_client') === 'True';
 
         this.rabbitmq1 = this.configService.get('rabbitmq1');
         this.rabbitmq2 = this.configService.get('rabbitmq2');
