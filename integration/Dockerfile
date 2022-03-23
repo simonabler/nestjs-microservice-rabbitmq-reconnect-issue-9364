@@ -7,13 +7,14 @@ COPY package*.json tsconfig*.json ./
 RUN npm install
 
 # Copy the rest of the application source code to the container
-COPY src/ src/
+COPY ./ ./
 
 # Transpile typescript and bundle the project
 RUN npm run build
 
 # Remove the original src directory (our new compiled source is in the `dist` folder)
-RUN rm -r src
+RUN rm -r apps
+RUN rm -r libs
 
 # Assign `npm run start:prod` as the default command to run when booting the container
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:prod:all"]

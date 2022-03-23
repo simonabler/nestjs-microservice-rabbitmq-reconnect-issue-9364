@@ -7,7 +7,9 @@ services:
     networks:
         - rabbitmq_go_net
   nestjs:
-    build: .
+    build: 
+      context: .
+      dockerfile: integration/Dockerfile
     hostname: "nestjs"
     container_name: "nestjs"
     ports:
@@ -17,9 +19,13 @@ services:
         - .env:/usr/src/app/.env
     networks:
         - rabbitmq_go_net
+    depends_on:
+      - rabbitmq1
+      - rabbitmq2
+      - rabbitmq3
   rabbitmq1:
     build: 
-      context: .
+      context: ./integration
       dockerfile: Dockerfile-RMQ
     hostname: "rabbit1"
     container_name: "rabbitmq1"
@@ -36,7 +42,7 @@ services:
         - CONSUL_HOST=consul
   rabbitmq2:
     build:
-      context: .
+      context: ./integration
       dockerfile: Dockerfile-RMQ
     hostname: "rabbit2"
     container_name: "rabbitmq2"
@@ -53,7 +59,7 @@ services:
         - CONSUL_HOST=consul
   rabbitmq3:
     build:
-      context: .
+      context: ./integration
       dockerfile: Dockerfile-RMQ
     hostname: "rabbit3"
     container_name: "rabbitmq3"
@@ -71,7 +77,7 @@ services:
   haproxy:
     image: haproxy:latest
     volumes:
-      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+      - ./integration/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     networks:
         - rabbitmq_go_net
     depends_on:
