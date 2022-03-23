@@ -15,9 +15,13 @@
     "start:prod:producer": "node dist/apps/producer/src/main",
     "start:prod:consumer": "node dist/apps/consumer/src/main",
     "start:prod:all": "concurrently \"npm run start:prod:producer\" \"npm run start:prod:consumer\"",
-    "test:docker:up": "docker-compose -f integration/docker-compose.yml up -d",
-    "test:docker:down": "docker-compose -f integration/docker-compose.yml down",
-    "test:kill:node3": "docker stop rabbitmq3",
+    "test:docker:up": "docker-compose -f integration/docker-compose.yml --project-directory . up -d",
+    "test:docker:down": "docker-compose -f integration/docker-compose.yml --project-directory . down",
+    "test:prepare": "docker stop nestjs; docker start -i nestjs",
+    "test:testcase1": "docker stop rabbitmq3; npm run test:prepare",
+    "test:testcase2": "docker stop rabbitmq3;",
+    "test:load": "loadtest -t 100 -c 100 --rps 1000  http://localhost:3000",
+    "test:curl": "curl  http://localhost:3000",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
   "dependencies": {
